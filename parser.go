@@ -11,6 +11,7 @@ import (
 // subsequently calls html.Parse doesn't like returning errors for bad markup.
 func ExtractLinks(document string) []string {
 	links := []string{}
+	linkTracker := make(map[string]bool)
 	
 	// Skip the error as no combination of invalid HTML will trigger an error.
 	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(document))
@@ -19,7 +20,10 @@ func ExtractLinks(document string) []string {
 		// Only interested in anchors that have a href attribute.
 		link, href := s.Attr("href")
 		if href {
-			links = append(links, link)
+			if _, ok := linkTracker[link]; !ok {
+				links = append(links, link)
+				linkTracker[link] = true
+			}
 		}
 	})
 	
