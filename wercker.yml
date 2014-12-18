@@ -9,6 +9,8 @@ build:
           cd $WERCKER_SOURCE_DIR
           go version
           go get ./...
+          go get github.com/PuerkitoBio/goquery
+          go get github.com/stretchr/testify/assert
 
     # Build the project
     - script:
