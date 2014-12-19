@@ -14,6 +14,20 @@ func NewDocument(document string) *goquery.Document {
 	return doc
 }
 
+func ExtractTitle(doc *goquery.Document) string {
+	title := doc.Find("title")
+	if title.Length() > 0 {
+		return title.First().Text()
+	}
+
+	heading := doc.Find("h1")
+	if heading.Length() > 0 {
+		return heading.First().Text()
+	}
+
+	return ""
+}
+
 // Extracts all anchors (with href attributes) from a document and return a list
 // of the anchors. Should return an error but goquery.NewDocumentFromReader that
 // subsequently calls html.Parse doesn't like returning errors for bad markup.
