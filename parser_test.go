@@ -232,3 +232,21 @@ func TestParser_ExtractLinks_NoDuplicates(t *testing.T) {
 
 	assert.Equal(t, len(links), 3)
 }
+
+func TestParser_ExtractTextEmpty(t *testing.T) {
+	doc := NewDocument("")
+
+	text := ExtractText(doc)
+
+	assert.Equal(t, "", text)
+}
+
+func TestParser_ExtractTextFromPTags(t *testing.T) {
+	html := `<p>I am text one.</p><p>I am text two.</p>`
+
+	doc := NewDocument(html)
+
+	text := ExtractText(doc)
+
+	assert.Equal(t, "I am text one.\nI am text two.", text)
+}

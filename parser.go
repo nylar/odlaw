@@ -67,3 +67,14 @@ func ExtractLinks(doc *goquery.Document) []string {
 
 	return links
 }
+
+func ExtractText(doc *goquery.Document) string {
+	texts := []string{}
+	doc.Find("p").Each(func(i int, s *goquery.Selection) {
+		text := s.Text()
+		if text != "" {
+			texts = append(texts, text)
+		}
+	})
+	return strings.Join(texts, "\n")
+}
