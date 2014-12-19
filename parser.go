@@ -12,10 +12,10 @@ import (
 func ExtractLinks(document string) []string {
 	links := []string{}
 	linkTracker := make(map[string]bool)
-	
+
 	// Skip the error as no combination of invalid HTML will trigger an error.
 	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(document))
-	
+
 	doc.Find("a").Each(func(i int, s *goquery.Selection) {
 		// Only interested in anchors that have a href attribute.
 		link, href := s.Attr("href")
@@ -26,6 +26,6 @@ func ExtractLinks(document string) []string {
 			}
 		}
 	})
-	
+
 	return links
 }
