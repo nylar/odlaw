@@ -185,7 +185,9 @@ func TestParser_ExtractAuthorPrecedence(t *testing.T) {
 }
 
 func TestParser_ExtractLinks_Empty(t *testing.T) {
-	links := ExtractLinks("")
+	doc := NewDocument("")
+
+	links := ExtractLinks(doc)
 
 	assert.Equal(t, len(links), 0)
 }
@@ -198,7 +200,9 @@ func TestParser_ExtractLinks_Valid(t *testing.T) {
 	<a href="http://example.org/2">Link 2</a>
 </p>`
 
-	links := ExtractLinks(htmlSoup)
+	doc := NewDocument(htmlSoup)
+
+	links := ExtractLinks(doc)
 
 	assert.Equal(t, len(links), 2)
 }
@@ -206,7 +210,9 @@ func TestParser_ExtractLinks_Valid(t *testing.T) {
 func TestParser_ExtractLinks_Invalid(t *testing.T) {
 	// This should return an error but html.Parse doesn't seem to care.
 	invalidHtml := `<html><body><aef<eqf>>>qq></body></ht>`
-	links := ExtractLinks(invalidHtml)
+
+	doc := NewDocument(invalidHtml)
+	links := ExtractLinks(doc)
 
 	assert.Equal(t, len(links), 0)
 }
@@ -220,7 +226,9 @@ func TestParser_ExtractLinks_NoDuplicates(t *testing.T) {
 	<a href="http://example.org/1">Link 1</a>
 </p>`
 
-	links := ExtractLinks(htmlWithDupes)
+	doc := NewDocument(htmlWithDupes)
+
+	links := ExtractLinks(doc)
 
 	assert.Equal(t, len(links), 3)
 }
