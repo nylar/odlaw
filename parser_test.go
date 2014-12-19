@@ -3,8 +3,51 @@ package odlaw
 import (
 	"testing"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestParser_NewDocument(t *testing.T) {
+	html := `<html><body><p>Hello, World!</p></body></html>`
+
+	doc := NewDocument(html)
+
+	assert.IsType(t, new(goquery.Document), doc)
+}
+
+func TestParser_NewDocumentStripsJunk(t *testing.T) {
+	html := `
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello</title>
+
+	<script type="text/javascript">
+	alert("Hello, World");
+	</script>
+
+	<style>
+	* { font-family: 'Comic Sans' }
+	</style>
+</head>
+
+<body>
+	<p>Hello, World!</p>
+</body>
+</html>`
+
+	doc := NewDocument(html)
+	js := doc.Find("script")
+	css := doc.Find("style")
+	p := doc.Find("p")
+
+	// Should be removed and thus be 0 matching nodes.
+	assert.Equal(t, len(js.Nodes), 0)
+	assert.Equal(t, len(css.Nodes), 0)
+
+	// Everything else should be left as is.
+	assert.Equal(t, len(p.Nodes), 1)
+}
 
 func TestParser_ExtractLinks_Empty(t *testing.T) {
 	links := ExtractLinks("")
