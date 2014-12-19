@@ -28,6 +28,25 @@ func ExtractTitle(doc *goquery.Document) string {
 	return ""
 }
 
+func ExtractAuthor(doc *goquery.Document) string {
+	meta := doc.Find("meta[name=author]")
+	if meta.Length() > 0 {
+		author, exists := meta.Attr("content")
+		if exists {
+			return author
+		}
+	}
+
+	// FIXME: This will not adapt well, some sites are going to use funky
+	//       and exotic class names.
+	author := doc.Find(".author, #author")
+	if author.Length() > 0 {
+		return author.First().Text()
+	}
+
+	return ""
+}
+
 // Extracts all anchors (with href attributes) from a document and return a list
 // of the anchors. Should return an error but goquery.NewDocumentFromReader that
 // subsequently calls html.Parse doesn't like returning errors for bad markup.

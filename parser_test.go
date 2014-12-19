@@ -114,6 +114,76 @@ func TestParser_ExtractTitleEmpty(t *testing.T) {
 	assert.Equal(t, "", title)
 }
 
+func TestParser_ExtractAuthorFromMeta(t *testing.T) {
+	html := `
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="author" content="Tony Stark">
+</head>
+<body></body>
+</html>`
+
+	doc := NewDocument(html)
+
+	author := ExtractAuthor(doc)
+
+	assert.Equal(t, "Tony Stark", author)
+}
+
+func TestParser_ExtractAuthorFromMetaMissingContentAttribute(t *testing.T) {
+	html := `
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="author">
+</head>
+<body></body>
+</html>`
+
+	doc := NewDocument(html)
+
+	author := ExtractAuthor(doc)
+
+	assert.Equal(t, "", author)
+}
+
+func TestParser_ExtractAuthorFromIdentifier(t *testing.T) {
+	html := `
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+	<p class="author">Tony Stark</p>
+</body>
+</html>`
+
+	doc := NewDocument(html)
+
+	author := ExtractAuthor(doc)
+
+	assert.Equal(t, "Tony Stark", author)
+}
+
+func TestParser_ExtractAuthorPrecedence(t *testing.T) {
+	html := `
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="author" content="Tony Stark">
+</head>
+<body>
+	<p class="author">Iron Man</p>
+</body>
+</html>`
+
+	doc := NewDocument(html)
+
+	author := ExtractAuthor(doc)
+
+	assert.Equal(t, "Tony Stark", author)
+}
+
 func TestParser_ExtractLinks_Empty(t *testing.T) {
 	links := ExtractLinks("")
 
