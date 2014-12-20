@@ -24,9 +24,5 @@ build:
         code: |
           go test ./...
 
-    - script:
-        name: go coverage
-        code: |
-          sudo pip install codecov
-          codecov --token=$CODECOV_TOKEN
- 
+    - tcnksm/goveralls:
+        token: $COVERALLS_TOKEN
