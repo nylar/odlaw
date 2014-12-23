@@ -46,7 +46,7 @@ func (lw *LinkWorker) Pop() interface{} {
 
 	item := lw.container.Front()
 	if item != nil {
-		return item.Value
+		return lw.container.Remove(item)
 	}
 
 	return nil

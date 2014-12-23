@@ -62,4 +62,5 @@ func TestWorker_LinkWorkerPop(t *testing.T) {
 	lw.Push(l)
 
 	assert.Equal(t, lw.Pop(), l)
+	assert.Equal(t, lw.Len(), 0)
 }
