@@ -6,6 +6,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// NewDocument generates a new Document and strips out useless tags.
 func NewDocument(document string) *goquery.Document {
 	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(document))
 
@@ -14,6 +15,8 @@ func NewDocument(document string) *goquery.Document {
 	return doc
 }
 
+// ExtractTitle searches for a title tag or the first h1 tag, if none of these
+// are found then just set the title to an empty string.
 func ExtractTitle(doc *goquery.Document) string {
 	title := doc.Find("title")
 	if title.Length() > 0 {
@@ -28,6 +31,7 @@ func ExtractTitle(doc *goquery.Document) string {
 	return ""
 }
 
+// ExtractAuthor searches for an author in a meta tag or an author class or ID.
 func ExtractAuthor(doc *goquery.Document) string {
 	meta := doc.Find("meta[name=author]")
 	if meta.Length() > 0 {
@@ -47,7 +51,7 @@ func ExtractAuthor(doc *goquery.Document) string {
 	return ""
 }
 
-// Extracts all anchors (with href attributes) from a document and return a list
+// ExtractLinks all anchors (with href attributes) from a document and return a list
 // of the anchors. Should return an error but goquery.NewDocumentFromReader that
 // subsequently calls html.Parse doesn't like returning errors for bad markup.
 func ExtractLinks(doc *goquery.Document) []string {
@@ -68,6 +72,7 @@ func ExtractLinks(doc *goquery.Document) []string {
 	return links
 }
 
+// ExtractText extracts all p tags from a page.
 func ExtractText(doc *goquery.Document) string {
 	texts := []string{}
 	doc.Find("p").Each(func(i int, s *goquery.Selection) {

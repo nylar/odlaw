@@ -209,9 +209,9 @@ func TestParser_ExtractLinks_Valid(t *testing.T) {
 
 func TestParser_ExtractLinks_Invalid(t *testing.T) {
 	// This should return an error but html.Parse doesn't seem to care.
-	invalidHtml := `<html><body><aef<eqf>>>qq></body></ht>`
+	invalidHTML := `<html><body><aef<eqf>>>qq></body></ht>`
 
-	doc := NewDocument(invalidHtml)
+	doc := NewDocument(invalidHTML)
 	links := ExtractLinks(doc)
 
 	assert.Equal(t, len(links), 0)
