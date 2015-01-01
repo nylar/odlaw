@@ -54,22 +54,16 @@ func ExtractAuthor(doc *goquery.Document) string {
 // ExtractLinks all anchors (with href attributes) from a document and return a list
 // of the anchors. Should return an error but goquery.NewDocumentFromReader that
 // subsequently calls html.Parse doesn't like returning errors for bad markup.
-func ExtractLinks(doc *goquery.Document) []string {
-	links := []string{}
-	linkTracker := make(map[string]bool)
-
+func ExtractLinks(doc *goquery.Document, lw *LinkWorker) {
 	doc.Find("a").Each(func(i int, s *goquery.Selection) {
 		// Only interested in anchors that have a href attribute.
 		link, href := s.Attr("href")
 		if href {
-			if _, ok := linkTracker[link]; !ok {
-				links = append(links, link)
-				linkTracker[link] = true
-			}
+			lw.Push(Link(link))
 		}
 	})
 
-	return links
+	return
 }
 
 // ExtractText extracts all p tags from a page.

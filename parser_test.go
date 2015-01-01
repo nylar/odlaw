@@ -186,10 +186,11 @@ func TestParser_ExtractAuthorPrecedence(t *testing.T) {
 
 func TestParser_ExtractLinks_Empty(t *testing.T) {
 	doc := NewDocument("")
+	lw := NewLinkWorker()
 
-	links := ExtractLinks(doc)
+	ExtractLinks(doc, lw)
 
-	assert.Equal(t, len(links), 0)
+	assert.Equal(t, lw.Len(), 0)
 }
 
 func TestParser_ExtractLinks_Valid(t *testing.T) {
@@ -201,10 +202,11 @@ func TestParser_ExtractLinks_Valid(t *testing.T) {
 </p>`
 
 	doc := NewDocument(htmlSoup)
+	lw := NewLinkWorker()
 
-	links := ExtractLinks(doc)
+	ExtractLinks(doc, lw)
 
-	assert.Equal(t, len(links), 2)
+	assert.Equal(t, lw.Len(), 2)
 }
 
 func TestParser_ExtractLinks_Invalid(t *testing.T) {
@@ -212,9 +214,10 @@ func TestParser_ExtractLinks_Invalid(t *testing.T) {
 	invalidHTML := `<html><body><aef<eqf>>>qq></body></ht>`
 
 	doc := NewDocument(invalidHTML)
-	links := ExtractLinks(doc)
+	lw := NewLinkWorker()
+	ExtractLinks(doc, lw)
 
-	assert.Equal(t, len(links), 0)
+	assert.Equal(t, lw.Len(), 0)
 }
 
 func TestParser_ExtractLinks_NoDuplicates(t *testing.T) {
@@ -227,10 +230,11 @@ func TestParser_ExtractLinks_NoDuplicates(t *testing.T) {
 </p>`
 
 	doc := NewDocument(htmlWithDupes)
+	lw := NewLinkWorker()
 
-	links := ExtractLinks(doc)
+	ExtractLinks(doc, lw)
 
-	assert.Equal(t, len(links), 3)
+	assert.Equal(t, lw.Len(), 3)
 }
 
 func TestParser_ExtractTextEmpty(t *testing.T) {
